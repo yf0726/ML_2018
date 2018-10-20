@@ -114,20 +114,22 @@ def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
     accuracy_train = compute_accuracy(y_train_pred, y_train)
     accuracy_test = compute_accuracy(y_test_pred, y_test)
 
-    return accuracy_train, accuracy_test   
+    return weight,accuracy_train, accuracy_test   
 
 def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
     k_indices = build_k_indices(y, k_fold, seed)
+    weight = np.zeros(x.shape[1]+1)
     list_accuracy_train = []
     list_accuracy_test = []
     
     for k in range(k_fold):
-        acc_tr,acc_te = cross_validation(y, x, k_indices, k, regression_method, **kwargs)
+        w,acc_tr,acc_te = cross_validation(y, x, k_indices, k, regression_method, **kwargs)
+        weight = weight + w
         list_accuracy_train.append(acc_tr)
         list_accuracy_test.append(acc_te)
         # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
     
-    return np.mean(list_accuracy_train),np.mean(list_accuracy_test)
+    return weight/10,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
     
 # ----------    Gradient descent    ---------- #
 def compute_gradient(y, tx, w):
