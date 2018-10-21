@@ -169,6 +169,16 @@ def ridge_regression(y, x):
 
 
 # ----------    Logistic regression    ---------- #
+def sigmoid(t):
+    """apply sigmoid function on t."""
+    return 1.0 / (1 + np.exp(-t))
+
+def calculate_logi_loss(y, tx, w):
+    """compute the cost by negative log likelihood."""
+    pred = sigmoid(tx.dot(w))
+    loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))
+    return np.squeeze(- loss)
+
 def calculate_gradient(y, tx, w):
     """compute the gradient of loss."""
     pred = sigmoid(tx.dot(w))
@@ -186,33 +196,39 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     w -= gamma * grad
     return loss, w
 
-def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma, threshold):
+def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
     # init parameters
     losses = []
     w = initial_w
+    threshold = 1e-8
+    y = y.reshape(len(y),1)
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         # log info
-        if iter % 100 == 0:
+        if iter % 10 == 0:
             print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
+    return weight, losses[-1]
 
 # ----------    Regularized logistic regression    ---------- #
 def penalized_logistic_regression(y, tx, w, lambda_):
+    y = y.reshape(len(y),1)
     loss = calculate_logi_loss(y, tx, w) + lambda_ * np.squeeze(w.T.dot(w))
     gradient = tx.T.dot(1.0 / (1 + np.exp(-tx.dot(w))) - y) + 2 * lambda_ * w
     return loss, gradient
 
-def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, threshold):
+def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
     # Set default weight
     weight = initial_w
     losses = []
+    y = y.reshape(len(y),1)
+    threshold = 1e-8
 
     for i in range(max_iters):
 
@@ -228,3 +244,4 @@ def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma,
         # termination condition
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
+    return weight, losses[-1]
