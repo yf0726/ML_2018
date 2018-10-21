@@ -66,6 +66,61 @@ def compute_loss(y, tx, w, method = calculate_mse):
     return method(e)
     # return calculate_mae(e)
 
+<<<<<<< HEAD
+=======
+def compute_accuracy(y_pred,y_true):
+    return (1 - sum(abs(y_pred-y_true)/2)/len(y_pred))
+    
+# ----------     cross validation   ---------- #
+
+def build_k_indices(y, k_fold, seed):
+    """build k indices for k-fold."""
+    num_row = y.shape[0]
+    interval = int(num_row / k_fold)
+    np.random.seed(seed)
+    indices = np.random.permutation(num_row)
+    k_indices = [indices[k * interval: (k + 1) * interval]
+                 for k in range(k_fold)]
+    return np.array(k_indices)
+
+def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
+    
+    train_idx = k_indices[k]
+    train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
+    [x_train,y_train,x_test,y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
+    
+    x_train = np.hstack((np.ones((x_train.shape[0], 1)), x_train))
+    x_test = np.hstack((np.ones((x_test.shape[0], 1)), x_test))
+
+    weight = regression_method(y = y_train, tx = x_train, **kwargs)
+    
+    # loss_tr = np.sqrt(2 * compute_mse(y_train,x_train,weight))
+    # loss_te = np.sqrt(2 * compute_mse(y_test,x_test,weight))    
+
+    y_train_pred = predict_labels(weight, x_train)
+    y_test_pred = predict_labels(weight, x_test)
+
+    accuracy_train = compute_accuracy(y_train_pred, y_train)
+    accuracy_test = compute_accuracy(y_test_pred, y_test)
+
+    return weight,accuracy_train, accuracy_test   
+
+def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
+    k_indices = build_k_indices(y, k_fold, seed)
+    weight = np.zeros(x.shape[1]+1)
+    list_accuracy_train = []
+    list_accuracy_test = []
+    
+    for k in range(k_fold):
+        w,acc_tr,acc_te = cross_validation(y, x, k_indices, k, regression_method, **kwargs)
+        weight = weight + w
+        list_accuracy_train.append(acc_tr)
+        list_accuracy_test.append(acc_te)
+        # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
+    
+    return weight/10,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
+    
+>>>>>>> parent of ae38e3a... update
 # ----------    Gradient descent    ---------- #
 def compute_gradient(y, tx, w):
     """Compute the gradient."""
@@ -209,22 +264,18 @@ def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
-    return weight, losses[-1]
 
 # ----------    Regularized logistic regression    ---------- #
 def penalized_logistic_regression(y, tx, w, lambda_):
-    y = y.reshape(len(y),1)
     loss = calculate_logi_loss(y, tx, w) + lambda_ * np.squeeze(w.T.dot(w))
     gradient = tx.T.dot(1.0 / (1 + np.exp(-tx.dot(w))) - y) + 2 * lambda_ * w
     return loss, gradient
 
-def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
+def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, threshold):
 
     # Set default weight
     weight = initial_w
     losses = []
-    y = y.reshape(len(y),1)
-    threshold = 1e-8
 
     for i in range(max_iters):
 
@@ -240,4 +291,3 @@ def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma)
         # termination condition
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
-    return weight, losses[-1]
