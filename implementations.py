@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import csv
+
 # -----------   helpers            ---------- #
 def load_csv_data(data_path, sub_sample=False):
     """Loads data and returns y (class labels), tX (features) and ids (event ids)"""
@@ -19,6 +19,7 @@ def load_csv_data(data_path, sub_sample=False):
         yb = yb[::50]
         input_data = input_data[::50]
         ids = ids[::50]
+
     return yb, input_data, ids
 
 def standardize(x):
@@ -32,28 +33,10 @@ def standardize(x):
     std_x = np.std(x, axis=0)
     for colomn in range(x.shape[1]):
         x_standardize[:, colomn] = x_standardize[:, colomn] / std_x[colomn]
+
     return x_standardize, mean_x, std_x
 
-def predict_labels(weights, data):
-    """Generates class predictions given weights, and a test data matrix"""
-    y_pred = np.dot(data, weights)
-    y_pred[np.where(y_pred <= 0)] = -1
-    y_pred[np.where(y_pred > 0)] = 1
-    return y_pred
 
-def create_csv_submission(ids, y_pred, name):
-    """
-    Creates an output file in csv format for submission to kaggle
-    Arguments: ids (event ids associated with each prediction)
-               y_pred (predicted class labels)
-               name (string name of .csv output file to be created)
-    """
-    with open(name, 'w') as csvfile:
-        fieldnames = ['Id', 'Prediction']
-        writer = csv.DictWriter(csvfile, delimiter=",", fieldnames=fieldnames)
-        writer.writeheader()
-        for r1, r2 in zip(ids, y_pred):
-            writer.writerow({'Id':int(r1),'Prediction':int(r2)})
 
 # ----------    Cost calculation    ---------- #
 def calculate_mse(e):
@@ -64,10 +47,14 @@ def calculate_mae(e):
     """Calculate the mae for vector e."""
     return np.mean(np.abs(e))
 
+def sigmoid(t):
+    """apply sigmoid function on t."""
+    return 1.0 / (1 + np.exp(-t))
+
 def calculate_logi_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
-    pred = 1.0 / (1 + np.exp(-tx.dot(w)))
-    loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))
+    pred = sigmoid(tx.dot(w))
+    loss = y.T.dot(np.log(pred )) + (1 - y).T.dot(np.log(1 - pred))
     return np.squeeze(- loss)
 
 def compute_loss(y, tx, w, method = calculate_mse):
@@ -79,58 +66,6 @@ def compute_loss(y, tx, w, method = calculate_mse):
     return method(e)
     # return calculate_mae(e)
 
-def compute_accuracy(y_pred,y_true):
-    return (1 - sum(abs(y_pred-y_true)/2)/len(y_pred))
-    
-# ----------     cross validation   ---------- #
-
-def build_k_indices(y, k_fold, seed):
-    """build k indices for k-fold."""
-    num_row = y.shape[0]
-    interval = int(num_row / k_fold)
-    np.random.seed(seed)
-    indices = np.random.permutation(num_row)
-    k_indices = [indices[k * interval: (k + 1) * interval]
-                 for k in range(k_fold)]
-    return np.array(k_indices)
-
-def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
-    
-    test_idx = k_indices[k]
-    train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
-    [x_train,y_train,x_test,y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
-    
-    x_train = np.hstack((np.ones((x_train.shape[0], 1)), x_train))
-    x_test = np.hstack((np.ones((x_test.shape[0], 1)), x_test))
-
-    weight = regression_method(y = y_train, tx = x_train, **kwargs)
-    
-    # loss_tr = np.sqrt(2 * compute_mse(y_train,x_train,weight))
-    # loss_te = np.sqrt(2 * compute_mse(y_test,x_test,weight))    
-
-    y_train_pred = predict_labels(weight, x_train)
-    y_test_pred = predict_labels(weight, x_test)
-
-    accuracy_train = compute_accuracy(y_train_pred, y_train)
-    accuracy_test = compute_accuracy(y_test_pred, y_test)
-
-    return weight,accuracy_train, accuracy_test   
-
-def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
-    k_indices = build_k_indices(y, k_fold, seed)
-    weight = np.zeros(x.shape[1]+1)
-    list_accuracy_train = []
-    list_accuracy_test = []
-    
-    for k in range(k_fold):
-        w,acc_tr,acc_te = cross_validation(y, x, k_indices, k, regression_method, **kwargs)
-        weight = weight + w
-        list_accuracy_train.append(acc_tr)
-        list_accuracy_test.append(acc_te)
-        # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
-    
-    return weight/10,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
-    
 # ----------    Gradient descent    ---------- #
 def compute_gradient(y, tx, w):
     """Compute the gradient."""
@@ -221,26 +156,22 @@ def ridge_regression_solve(y, tx, lambda_):
     b = tx.T.dot(y)
     return np.linalg.solve(a, b)
 
-def ridge_regression(y, tx, lambda_):
+def ridge_regression(y, x):
     """ridge regression demo."""
     # define parameter
-    # lambdas = np.logspace(-15, 5, 50) 
-#     rmse_tr = []
-#     for ind, lambda_ in enumerate(lambdas):
-#         # ridge regression
-#         weight = ridge_regression_solve(y, x, lambda_)
-#         rmse_tr.append(np.sqrt(2 * compute_loss(y, x, weight)))
-#         print("lambda={l:.3f}, Training RMSE={tr:.3f}".format(l=lambda_, tr=rmse_tr[ind]))
-    aI = 2 * tx.shape[0] * lambda_ * np.identity(tx.shape[1])
-    a = tx.T.dot(tx) + aI
-    b = tx.T.dot(y)
-    return np.linalg.solve(a, b)
+    lambdas = np.logspace(-15, 5, 50)
+    rmse_tr = []
+    for ind, lambda_ in enumerate(lambdas):
+        # ridge regression
+        weight = ridge_regression_solve(y, x, lambda_)
+        rmse_tr.append(np.sqrt(2 * compute_loss(y, x, weight)))
+        print("lambda={l:.3f}, Training RMSE={tr:.3f}".format(l=lambda_, tr=rmse_tr[ind]))
 
 
 # ----------    Logistic regression    ---------- #
 def calculate_gradient(y, tx, w):
     """compute the gradient of loss."""
-    pred = 1.0 / (1 + np.exp(-tx.dot(w)))
+    pred = sigmoid(tx.dot(w))
     grad = tx.T.dot(pred - y)
     return grad
 
@@ -249,6 +180,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     Do one step of gradient descen using logistic regression.
     Return the loss and the updated w.
     """
+
     loss = calculate_logi_loss(y, tx, w)
     grad = calculate_gradient(y, tx, w)
     w -= gamma * grad
