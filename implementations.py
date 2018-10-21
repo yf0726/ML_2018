@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import csv
 
 # -----------   helpers            ---------- #
 def load_csv_data(data_path, sub_sample=False):
@@ -59,6 +60,25 @@ def create_csv_submission(ids, y_pred, name):
         for r1, r2 in zip(ids, y_pred):
             writer.writerow({'Id':int(r1),'Prediction':int(r2)})
 
+def build_polynomial_features(x, degree):
+    temp_dict = {}
+    count = 0
+    for i in range(x.shape[1]):
+        for j in range(i+1,x.shape[1]):
+            temp = x[:,i] * x[:,j]
+            temp_dict[count] = [temp]
+            count += 1
+    poly_length = x.shape[1] * (degree + 1) + count# + 1
+    poly = np.zeros(shape = (x.shape[0], poly_length))
+    for deg in range(1,degree+1):
+        for i in range(x.shape[1]):
+            poly[:,i + (deg-1) * x.shape[1]] = np.power(x[:,i],deg)
+    for i in range(count):
+        poly[:, x.shape[1] * degree + i] = temp_dict[i][0]
+    for i in range(x.shape[1]):
+        poly[:,i + x.shape[1] * degree + count] = np.abs(x[:,i])**0.5
+    return poly            
+            
 # ----------    Cost calculation    ---------- #
 def calculate_mse(e):
     """Calculate the mse for vector e."""
@@ -227,7 +247,9 @@ def ridge_regression(y, tx, lambda_):
     aI = 2 * tx.shape[0] * lambda_ * np.identity(tx.shape[1])
     a = tx.T.dot(tx) + aI
     b = tx.T.dot(y)
-    return np.linalg.solve(a, b)
+    w = np.linalg.solve(a, b)
+    loss = compute_loss(y,tx,w)
+    return loss,w
 
 # def ridge_regression(y, x):
 #     """ridge regression demo."""
