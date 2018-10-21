@@ -64,12 +64,6 @@ def calculate_mae(e):
     """Calculate the mae for vector e."""
     return np.mean(np.abs(e))
 
-def calculate_logi_loss(y, tx, w):
-    """compute the cost by negative log likelihood."""
-    pred = 1.0 / (1 + np.exp(-tx.dot(w)))
-    loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))
-    return np.squeeze(- loss)
-
 def compute_loss(y, tx, w, method = calculate_mse):
     """Calculate the loss.
 
@@ -96,7 +90,7 @@ def build_k_indices(y, k_fold, seed):
 
 def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
     
-    test_idx = k_indices[k]
+    train_idx = k_indices[k]
     train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
     [x_train,y_train,x_test,y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
     
@@ -238,6 +232,16 @@ def ridge_regression(y, tx, lambda_):
 
 
 # ----------    Logistic regression    ---------- #
+def sigmoid(t):
+    """apply sigmoid function on t."""
+    return 1.0 / (1 + np.exp(-t))
+
+def calculate_logi_loss(y, tx, w):
+    """compute the cost by negative log likelihood."""
+    pred = sigmoid(tx.dot(w))
+    loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))
+    return np.squeeze(- loss)
+
 def calculate_gradient(y, tx, w):
     """compute the gradient of loss."""
     pred = 1.0 / (1 + np.exp(-tx.dot(w)))
@@ -254,16 +258,18 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     w -= gamma * grad
     return loss, w
 
-def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma, threshold):
+def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
     # init parameters
     losses = []
     w = initial_w
+    threshold = 1e-8
+    y = y.reshape(len(y),1)
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         # log info
-        if iter % 100 == 0:
+        if iter % 10 == 0:
             print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
         # converge criterion
         losses.append(loss)
