@@ -36,7 +36,28 @@ def standardize(x):
 
     return x_standardize, mean_x, std_x
 
+def predict_labels(weights, data):
+    """Generates class predictions given weights, and a test data matrix"""
+    y_pred = np.dot(data, weights)
+    y_pred[np.where(y_pred <= 0)] = -1
+    y_pred[np.where(y_pred > 0)] = 1
+    
+    return y_pred
 
+
+def create_csv_submission(ids, y_pred, name):
+    """
+    Creates an output file in csv format for submission to kaggle
+    Arguments: ids (event ids associated with each prediction)
+               y_pred (predicted class labels)
+               name (string name of .csv output file to be created)
+    """
+    with open(name, 'w') as csvfile:
+        fieldnames = ['Id', 'Prediction']
+        writer = csv.DictWriter(csvfile, delimiter=",", fieldnames=fieldnames)
+        writer.writeheader()
+        for r1, r2 in zip(ids, y_pred):
+            writer.writerow({'Id':int(r1),'Prediction':int(r2)})
 
 # ----------    Cost calculation    ---------- #
 def calculate_mse(e):
@@ -66,8 +87,6 @@ def compute_loss(y, tx, w, method = calculate_mse):
     return method(e)
     # return calculate_mae(e)
 
-<<<<<<< HEAD
-=======
 def compute_accuracy(y_pred,y_true):
     return (1 - sum(abs(y_pred-y_true)/2)/len(y_pred))
     
@@ -85,14 +104,14 @@ def build_k_indices(y, k_fold, seed):
 
 def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
     
-    train_idx = k_indices[k]
+    test_idx = k_indices[k]
     train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
     [x_train,y_train,x_test,y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
     
     x_train = np.hstack((np.ones((x_train.shape[0], 1)), x_train))
     x_test = np.hstack((np.ones((x_test.shape[0], 1)), x_test))
 
-    weight = regression_method(y = y_train, tx = x_train, **kwargs)
+    loss,weight = regression_method(y = y_train, tx = x_train, **kwargs)
     
     # loss_tr = np.sqrt(2 * compute_mse(y_train,x_train,weight))
     # loss_te = np.sqrt(2 * compute_mse(y_test,x_test,weight))    
@@ -120,7 +139,6 @@ def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
     
     return weight/10,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
     
->>>>>>> parent of ae38e3a... update
 # ----------    Gradient descent    ---------- #
 def compute_gradient(y, tx, w):
     """Compute the gradient."""
@@ -204,23 +222,23 @@ def least_squares_regression(y, x):
     print("rmse={loss}".format(loss=rmse))
 
 # ----------    Ridge Regression    ---------- #
-def ridge_regression_solve(y, tx, lambda_):
+def ridge_regression(y, tx, lambda_):
     """implement ridge regression."""
     aI = 2 * tx.shape[0] * lambda_ * np.identity(tx.shape[1])
     a = tx.T.dot(tx) + aI
     b = tx.T.dot(y)
     return np.linalg.solve(a, b)
 
-def ridge_regression(y, x):
-    """ridge regression demo."""
-    # define parameter
-    lambdas = np.logspace(-15, 5, 50)
-    rmse_tr = []
-    for ind, lambda_ in enumerate(lambdas):
-        # ridge regression
-        weight = ridge_regression_solve(y, x, lambda_)
-        rmse_tr.append(np.sqrt(2 * compute_loss(y, x, weight)))
-        print("lambda={l:.3f}, Training RMSE={tr:.3f}".format(l=lambda_, tr=rmse_tr[ind]))
+# def ridge_regression(y, x):
+#     """ridge regression demo."""
+#     # define parameter
+#     lambdas = np.logspace(-15, 5, 50)
+#     rmse_tr = []
+#     for ind, lambda_ in enumerate(lambdas):
+#         # ridge regression
+#         weight = ridge_regression_solve(y, x, lambda_)
+#         rmse_tr.append(np.sqrt(2 * compute_loss(y, x, weight)))
+#         print("lambda={l:.3f}, Training RMSE={tr:.3f}".format(l=lambda_, tr=rmse_tr[ind]))
 
 
 # ----------    Logistic regression    ---------- #
@@ -247,10 +265,10 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     w -= gamma * grad
     return loss, w
 
-def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
+def logistic_regression_GD(y, tx, max_iters, gamma):
     # init parameters
     losses = []
-    w = initial_w
+    w = np.zeros((tx.shape[1], 1))
     threshold = 1e-8
     y = y.reshape(len(y),1)
     # start the logistic regression
@@ -258,12 +276,13 @@ def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
         # get loss and update w.
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         # log info
-        if iter % 10 == 0:
-            print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
+        # if iter % 10 == 0:
+            # print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
+    return losses[-1],w
 
 # ----------    Regularized logistic regression    ---------- #
 def penalized_logistic_regression(y, tx, w, lambda_):
