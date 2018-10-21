@@ -169,10 +169,6 @@ def ridge_regression(y, x):
 
 
 # ----------    Logistic regression    ---------- #
-def sigmoid(t):
-    """apply sigmoid function on t."""
-    return 1.0 / (1 + np.exp(-t))
-
 def calculate_logi_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
     pred = sigmoid(tx.dot(w))
