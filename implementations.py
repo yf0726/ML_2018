@@ -90,7 +90,7 @@ def build_k_indices(y, k_fold, seed):
 
 def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
     
-    train_idx = k_indices[k]
+    test_idx = k_indices[k]
     train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
     [x_train,y_train,x_test,y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
     
@@ -275,18 +275,22 @@ def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
+    return weight, losses[-1]
 
 # ----------    Regularized logistic regression    ---------- #
 def penalized_logistic_regression(y, tx, w, lambda_):
+    y = y.reshape(len(y),1)
     loss = calculate_logi_loss(y, tx, w) + lambda_ * np.squeeze(w.T.dot(w))
     gradient = tx.T.dot(1.0 / (1 + np.exp(-tx.dot(w))) - y) + 2 * lambda_ * w
     return loss, gradient
 
-def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, threshold):
+def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
     # Set default weight
     weight = initial_w
     losses = []
+    y = y.reshape(len(y),1)
+    threshold = 1e-8
 
     for i in range(max_iters):
 
@@ -302,3 +306,4 @@ def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma,
         # termination condition
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
+    return weight, losses[-1]
