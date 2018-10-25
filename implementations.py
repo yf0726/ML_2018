@@ -156,7 +156,7 @@ def logistic_regression_GD(y, tx, max_iters):
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         # log info
         if iter % 10 == 0:
-            print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
+            # print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:

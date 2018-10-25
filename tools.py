@@ -1,5 +1,4 @@
 import numpy as np
-
 import csv
 
 # ----------    Simple DataFrame class replace the function of pandas.DataFrame---------- #
@@ -157,6 +156,13 @@ def compute_accuracy(y_pred,y_true):
     return (1 - sum(abs(y_pred-y_true)/2)/len(y_pred))
     
 # ----------     cross validation   ---------- #
+def predict_labels(weights, data):
+    """Generates class predictions given weights, and a test data matrix"""
+    y_pred = np.dot(data, weights)
+    y_pred[np.where(y_pred <= 0)] = -1
+    y_pred[np.where(y_pred > 0)] = 1
+    
+    return y_pred
 
 def build_k_indices(y, k_fold, seed):
     """build k indices for k-fold."""
@@ -198,11 +204,3 @@ def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
         # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
     
     return weight/k_fold,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
-
-def predict_labels(weights, data):
-    """Generates class predictions given weights, and a test data matrix"""
-    y_pred = np.dot(data, weights)
-    y_pred[np.where(y_pred <= 0)] = -1
-    y_pred[np.where(y_pred > 0)] = 1
-    
-    return y_pred
