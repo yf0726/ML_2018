@@ -139,7 +139,7 @@ def load_csv_data(data_path, sub_sample=False):
     return yb, input_data, ids, labels
 
 def log_process(x):
-    x_log = np.log10(1 / (1 + x[:,sum(x<0)==0])) # to avoid log(0)
+    x_log = np.log10(1 + x[:,sum(x<0)==0]) # to avoid log(0)
     # x_log = np.log(x[:,sum(x<0)==0])
     x = np.hstack((x, x_log))
     return x
@@ -155,6 +155,8 @@ def standardize(x):
     std_x = np.std(x, axis=0)
     for colomn in range(x.shape[1]):
         x_standardize[:, colomn] = x_standardize[:, colomn] / std_x[colomn]
+    
+    x_standardize = np.hstack((np.ones((x_standardize.shape[0], 1)), x_standardize))
 
     return x_standardize, mean_x, std_x
 
@@ -249,8 +251,8 @@ def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
     train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
     [x_train,y_train,x_test,y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
     
-    x_train = np.hstack((np.ones((x_train.shape[0], 1)), x_train))
-    x_test = np.hstack((np.ones((x_test.shape[0], 1)), x_test))
+    # x_train = np.hstack((np.ones((x_train.shape[0], 1)), x_train))
+    # x_test = np.hstack((np.ones((x_test.shape[0], 1)), x_test))
 
     loss,weight = regression_method(y = y_train, tx = x_train, **kwargs)
     
@@ -267,7 +269,7 @@ def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
 
 def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
     k_indices = build_k_indices(y, k_fold, seed)
-    weight = np.zeros(x.shape[1]+1)
+    weight = np.zeros(x.shape[1])
     list_accuracy_train = []
     list_accuracy_test = []
     
@@ -371,19 +373,6 @@ def ridge_regression(y, tx, lambda_):
     w = np.linalg.solve(a, b)
     loss = compute_loss(y,tx,w)
     return loss,w
-
-# def ridge_regression(y, x):
-#     """ridge regression demo."""
-#     # define parameter
-#     lambdas = np.logspace(-15, 5, 50)
-#     rmse_tr = []
-#     for ind, lambda_ in enumerate(lambdas):
-#         # ridge regression
-#         weight = ridge_regression_solve(y, x, lambda_)
-#         rmse_tr.append(np.sqrt(2 * compute_loss(y, x, weight)))
-#         print("lambda={l:.3f}, Training RMSE={tr:.3f}".format(l=lambda_, tr=rmse_tr[ind]))
-
-
 # ----------    Logistic regression    ---------- #
 def calculate_logi_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
@@ -408,7 +397,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     w -= gamma * grad
     return loss, w
 
-def logistic_regression_GD(y, tx, max_iters, gamma):
+def logistic_regression_GD(y, tx, max_iters):
     # init parameters
     losses = []
     w = np.zeros((tx.shape[1], 1))
@@ -417,6 +406,8 @@ def logistic_regression_GD(y, tx, max_iters, gamma):
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
+        eignvalue,_ = np.linalg.eig(tx.T.dot(tx))
+        gamma = 1/(0.5*eignvalue.max())
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         # log info
         # if iter % 10 == 0:
