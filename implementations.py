@@ -461,16 +461,16 @@ def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma,
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
 
-data_path = 'data/train.csv'
-data_label, data_origin, _, _ = load_csv_data(data_path, sub_sample=False)
-data_standardized, data_origin_mean ,data_origin_std = standardize(data_origin)
-# max_iters = 10000
-# threshold = 1e-8
-# gamma = 0.01
-# #w_initial = np.array([0]*data_standardized.shape[1], dtype='float64')
-# logistic_regression_GD(data_label, data_standardized,max_iters, gamma)
-
-w_initial = np.array([0]*data_standardized.shape[1])
-max_iters = 100
-gamma = 0.0007
-gradient_losses, gradient_ws = gradient_descent(data_label, data_standardized, w_initial, max_iters, gamma)
+# data_path = 'data/train.csv'
+# data_label, data_origin, _, _ = load_csv_data(data_path, sub_sample=False)
+# data_standardized, data_origin_mean ,data_origin_std = standardize(data_origin)
+# # max_iters = 10000
+# # threshold = 1e-8
+# # gamma = 0.01
+# # #w_initial = np.array([0]*data_standardized.shape[1], dtype='float64')
+# # logistic_regression_GD(data_label, data_standardized,max_iters, gamma)
+#
+# w_initial = np.array([0]*data_standardized.shape[1])
+# max_iters = 100
+# gamma = 0.0007
+# gradient_losses, gradient_ws = gradient_descent(data_label, data_standardized, w_initial, max_iters, gamma)
