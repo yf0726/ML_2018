@@ -160,6 +160,10 @@ def predict_labels(weights, data):
     
     return y_pred
 
+def predict_labels(weights, data):
+    y_pred = sigmoid(np.dot(data, weights))
+    y_pred[np.where(y_pred <= 0.5)] = -1
+    y_pred[np.where(y_pred > 0.5)] = 1
 
 def create_csv_submission(ids, y_pred, name):
     """
@@ -205,13 +209,21 @@ def calculate_mae(e):
 
 def sigmoid(t):
     """apply sigmoid function on t."""
-    return 1.0 / (1 + np.exp(-t))
+    logistic_value = np.exp(t) / (1 + np.exp(t))
+    logistic_value[np.isnan(logistic_value)] =1
+
+    return logistic_value
 
 def calculate_logi_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
     pred = sigmoid(tx.dot(w))
-    loss = y.T.dot(np.log(pred )) + (1 - y).T.dot(np.log(1 - pred))
+    loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))  # avoid 0
     return np.squeeze(- loss)
+# def calculate_logi_loss(y, tx, w):
+#     """compute the cost by negative log likelihood."""
+#     pred = sigmoid(tx.dot(w))
+#     loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))
+#     return np.squeeze(- loss)
 
 def compute_loss(y, tx, w, method = calculate_mse):
     """Calculate the loss.
@@ -379,12 +391,6 @@ def ridge_regression(y, tx, lambda_):
 
 
 # ----------    Logistic regression    ---------- #
-def calculate_logi_loss(y, tx, w):
-    """compute the cost by negative log likelihood."""
-    pred = sigmoid(tx.dot(w))
-    loss = y.T.dot(np.log(pred + 1e-12)) + (1 - y).T.dot(np.log(1 - pred + 1e-12))
-    return np.squeeze(- loss)
-
 def calculate_gradient(y, tx, w):
     """compute the gradient of loss."""
     pred = sigmoid(tx.dot(w))
@@ -396,7 +402,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     Do one step of gradient descen using logistic regression.
     Return the loss and the updated w.
     """
-
+    y = (y + 1) / 2     # make -1,1 values to 0,1
     loss = calculate_logi_loss(y, tx, w)
     grad = calculate_gradient(y, tx, w)
     w -= gamma * grad
@@ -413,8 +419,8 @@ def logistic_regression_GD(y, tx, max_iters, gamma):
         # get loss and update w.
         loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         # log info
-        # if iter % 10 == 0:
-            # print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
+        if iter % 10 == 0:
+            print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
@@ -430,6 +436,7 @@ def penalized_logistic_regression(y, tx, w, lambda_):
 def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, threshold):
 
     # Set default weight
+    y = (y + 1) / 2
     weight = initial_w
     losses = []
 
@@ -448,3 +455,11 @@ def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma,
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
 
+data_path = 'data/train.csv'
+data_label, data_origin, _, _ = load_csv_data(data_path, sub_sample=False)
+data_standardized, data_origin_mean ,data_origin_std = standardize(data_origin)
+max_iters = 10000
+threshold = 1e-8
+gamma = 0.01
+#w_initial = np.array([0]*data_standardized.shape[1], dtype='float64')
+logistic_regression_GD(data_label, data_standardized,max_iters, gamma)
