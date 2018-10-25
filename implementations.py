@@ -138,6 +138,12 @@ def load_csv_data(data_path, sub_sample=False):
 
     return yb, input_data, ids, labels
 
+def log_process(x):
+    x_log = np.log10(1 / (1 + x[:,sum(x<0)==0])) # to avoid log(0)
+    # x_log = np.log(x[:,sum(x<0)==0])
+    x = np.hstack((x, x_log))
+    return x
+
 def standardize(x):
     """Standardize the original data set."""
     x_standardize = np.empty_like(x, dtype='float64')
@@ -284,7 +290,7 @@ def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
         list_accuracy_test.append(acc_te)
         # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
     
-    return weight/10,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
+    return weight/k_fold,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
     
 # ----------    Gradient descent    ---------- #
 def compute_gradient(y, tx, w):
