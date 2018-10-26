@@ -18,19 +18,13 @@ Below we will introduce files and functions in our repotory.
 
 ## Auxiliary modules
 
-* ### `implementations.py`
-
-Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
-
-In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss` ,sigmoid function `sigmoid` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
-
 * ### `helpers.py`
 
 Contains the given helper functions, including `load_csv_data` (used to load csv file) and `create_csv_submission` (used to create output files in csv format for Kaggle submission).
 
 * ### `tools.py`
 
-** `DataFrame` The class is used to replace the pandas.DataFrame with Numpy methods, including copy, reset_index, drop, loc and value counts.
+  * `DataFrame` The class is used to replace the pandas.DataFrame with Numpy methods, including copy, reset_index, drop, loc and value counts.
 
 And in tools.py we also include functions used for data processing.
 
@@ -43,5 +37,10 @@ And in tools.py we also include functions used for data processing.
 Besides, in tools.py we include the cross validation functions using `predict_labels`, `build_k_indices`, `cross_validation` and `cv_loop`.
 
 ## Regression models
+* ### `implementations.py`
+
+Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
+
+In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss` ,sigmoid function `sigmoid` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
 
 ## Hyper-parameter tuning using Grid Search
