@@ -1,4 +1,4 @@
-# ML_2018
+# Machine Learning Project 1 on Higgs Boson Competition
 
 `Team`: 4 - 1 = 3 ducks
 
