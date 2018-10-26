@@ -18,14 +18,19 @@ Below we will introduce files and functions in our repotory.
 
 ## Auxiliary modules
 
-1. `implementations.py`
-Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`. In addition, we also include other function that are needed by the 6 model functions (namely, cost functions and sigmoid function).
+* ### `implementations.py`
 
-2. `helpers.py`
+Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
+
+In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss` ,sigmoid function `sigmoid` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
+
+* ### `helpers.py`
+
 Contains the given helper functions, including `load_csv_data` (used to load csv file) and `create_csv_submission` (used to create output files in csv format for Kaggle submission).
 
-3. `tools.py`
-`dataframe`
+* ### `tools.py`
+
+`dataframe` The class is used to replace the pandas.DataFrame with Numpy methods, including 
 
 data processing
 
