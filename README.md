@@ -1,8 +1,8 @@
 # ML_2018
 
-Team: `4-1=3 ducks`
+`Team`: 4-1=3 ducks
 
-Teammates: `Yan Fu, Shengzhao Xia, Wan-Tzu Huang`
+`Teammates`: Yan Fu, Shengzhao Xia, Wan-Tzu Huang
 
 This project is adapted from the Kaggle 2014 competition [Higgs Boson Machine Learning Challenge] (https://www.kaggle.com/c/Higgs-boson). The competition orgins from the famous Higgs Boson experiment and the competitors need to improve observation of Higgs Boson from background noise using machine learning methods. 
 
@@ -10,16 +10,18 @@ In this project, we are given train set data (including 250000 events, with an I
 
 To reproduce our result one will need to:
 
-1. Install Numpy on their computers;
-2. Download train.csv and test.csv from kaggle;
-3. Run the python scripy run.py.
+1. Install `Numpy` on their computers;
+2. Download `train.csv` and `test.csv` from [kaggle](https://www.kaggle.com/c/epfml18-higgs);
+3. Run the python scripy `run.py`.
 
-Below we will introduce files and function in our repotory.
+Below we will introduce files and functions in our repotory.
 
-Auxiliary modules
+## Auxiliary modules
 
-1. implementations.py
+1. `implementations.py`
+Contains 6 implemented model functions, including least squares GD, least squares SGD, least squares, ridge regression, logistic regression and reg logistic regression. In addition, we also include other function that are needed by the 6 model functions (namely, cost functions and sigmoid function).
 
-2. helpers.py
+2. `helpers.py`
+Contains the given helper functions, including load_csv_data (used to load csv file) and create_csv_submission (used to create output files in csv format for Kaggle submission).
 
-3. tools.py
+3. `tools.py`
