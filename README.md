@@ -30,21 +30,17 @@ Contains the given helper functions, including `load_csv_data` (used to load csv
 
 * ### `tools.py`
 
-`dataframe` The class is used to replace the pandas.DataFrame with Numpy methods, including 
+** `DataFrame` The class is used to replace the pandas.DataFrame with Numpy methods, including copy, reset_index, drop, loc and value counts.
 
-data processing
+And in tools.py we also include functions used for data processing.
 
-`log_process`
+  * `standardize`: Standardize data by minus data mean and then divide by data's standard deviation.
 
-`standardize`
+  * `log_process`: Take logarithm of positive data to narrow data ranging.
 
-`build_polynomial_features`
+  * `build_polynomial_features`: Build polynomial features by squaring, root-squaring and multiplying bewteen features. 
 
-cross validation
-`predict_labels`
-`build_k_indices`
-`cross_validation`
-`cv_loop`
+Besides, in tools.py we include the cross validation functions using `predict_labels`, `build_k_indices`, `cross_validation` and `cv_loop`.
 
 ## Regression models
 
