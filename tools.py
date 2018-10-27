@@ -131,7 +131,7 @@ def standardize(x):
     for colomn in range(x.shape[1]):
         x_standardize[:, colomn] = x_standardize[:, colomn] / std_x[colomn]
     
-    x_standardize = np.hstack((np.ones((x_standardize.shape[0], 1)), x_standardize))
+    # x_standardize = np.hstack((np.ones((x_standardize.shape[0], 1)), x_standardize))
 
     return x_standardize, mean_x, std_x
 
@@ -152,6 +152,7 @@ def build_poly(x, degrees):
         poly[:, x.shape[1] * degrees + i] = tmp_dict[i][0]
     for i in range(x.shape[1]):
         poly[:,i + x.shape[1] * degrees + count] = np.sqrt(np.abs(x[:,i]))
+    poly = np.hstack((np.ones((poly.shape[0], 1)), poly))
     return poly            
 
 def compute_accuracy(y_pred,y_true):
