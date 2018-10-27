@@ -291,7 +291,7 @@ def cross_validation(y, x, k_indices, k, regression_method, **kwargs):
     train_idx = list(set(np.arange(0,len(y)))-set(k_indices[k]))
     [x_train, y_train, x_test, y_test] = [x[train_idx], y[train_idx], x[test_idx], y[test_idx]]
     
-    loss, weight = regression_method(y=y_train, tx=x_train, **kwargs)
+    weight,loss = regression_method(y=y_train, tx=x_train, **kwargs)
     
     y_train_pred = predict_labels(weight, x_train)
     y_test_pred = predict_labels(weight, x_test)
@@ -328,5 +328,3 @@ def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
         # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
     return weight/k_fold, np.mean(list_accuracy_train), np.mean(list_accuracy_test)
 
-x = np.array([[1,2,3,4],[7,8,9,10]])
-standardize(x)

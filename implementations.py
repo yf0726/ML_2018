@@ -195,7 +195,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     loss = calculate_logi_loss(y, tx, w)
     grad = calculate_gradient(y, tx, w)
     w -= gamma * grad
-    return loss, w
+    return w,loss
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
@@ -218,14 +218,14 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
-        loss, w = learning_by_gradient_descent(y, tx, w, gamma)
+        w,loss = learning_by_gradient_descent(y, tx, w, gamma)
             # if iter % 10 == 0:
             #     print("Current iteration={i}, loss={l}".format(i=iter, l=loss))
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
-    return losses[-1], w
+    return w,losses[-1]
 
 # ----------    Regularized logistic regression    ---------- #
 def penalized_logistic_regression(y, tx, w, lambda_):
@@ -259,4 +259,4 @@ def reg_logistic_regression(y, tx, lambda_ , initial_w, max_iters, gamma):
         # termination condition
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
-    return losses[-1], weight
+    return weight,losses[-1]
