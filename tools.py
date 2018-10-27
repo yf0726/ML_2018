@@ -175,7 +175,7 @@ def log_process(x):
     :return: numpy.array -- data values after log process
     """
     columns = (sum(x < 0) == 0)                             # columns with no zero
-    x_log = np.log10(1 + x[:, columns])                     # to avoid log(0)
+    x_log = np.log(1/(1 + x[:, columns]))                     # to avoid log(0)
     x = np.hstack((x, x_log))
     return x
 
