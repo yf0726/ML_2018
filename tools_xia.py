@@ -1,6 +1,5 @@
 import numpy as np
-import csv
-from implementations import *
+import matplotlib.pyplot as plt
 
 # ----------    Simple DataFrame class replace the function of pandas.DataFrame---------- #
 class DataFrame:
@@ -18,21 +17,33 @@ class DataFrame:
                 column = []
                 for label in mark:
                     column = column + [i for i, place in enumerate(self.labels) if place == label]    # find the index of the label
-                return self.values[:, column].squeeze()
+                if self.values.ndim != 1:                       # if value is one dimension
+                    return self.values[:, column].squeeze()
+                else:
+                    return self.values[column].squeeze()
             elif type(mark[0]) == type(0) or type(mark[0]) == type(0.0):# pick a row using number label
                 row = []
                 for label in mark:
                     row = row + [i for i, place in enumerate(self.index) if place == label]
-                return self.values[row, :].squeeze()
+                if self.values.ndim != 1:                       # if value is one dimension
+                    return self.values[row, :].squeeze()
+                else:
+                    return self.values[row].squeeze()
         # if mark is not a list
         elif type(mark) == type('string'):                      # pick a column using string label
                 column = [i for i, place in enumerate(self.labels) if place == mark]    # find the index of the label
                 column = np.array(column)[0]                    # for only 1 line, other wise don't need the [0]
-                return self.values[:, column].squeeze()
+                if self.values.ndim != 1:                       # if value is one dimension
+                    return self.values[:, column].squeeze()
+                else:
+                    return self.values[column].squeeze()
         elif type(mark) == type(0) or type(mark) == type(0.0):# pick a row using number label
             row = [i for i, place in enumerate(self.index) if place == mark]
             row =np.array(row)[0]
-            return self.values[row, :].squeeze()
+            if self.values.ndim != 1:  # if value is one dimension
+                return self.values[row, :].squeeze()
+            else:
+                return self.values[row].squeeze()
 
     def __setitem__(self, key, value):  # assignment overloaded function: a[x] = b
         column = [i for i, place in enumerate(self.labels) if place == key]
@@ -110,10 +121,28 @@ class DataFrame:
             key[i] = order_dict[count_num[i]]
         return DataFrame(np.array(count_num).squeeze(), key, [label])
 
+    # def corr(self):
+    #     corr0 = np.corrcoef(self.values.T)
+    #     corr0_list = []
+    #     temp = np.array(self.labels)
+    #     for i in range(corr0.shape[0]):
+    #         corr0_list.append(temp[(corr0[i] > 0.7) | (corr0[i] < -0.7)])
+    #     return corr0_list
+        # ['DER_mass_MMC', 'DER_mass_vis']['DER_pt_h', 'DER_pt_tot']['DER_sum_pt', 'PRI_tau_pt', 'PRI_lep_pt']
+
+    # def missing_rate_test(self):
+    #     features = self.drop(['Prediction'])
+    #     missing_rate = []
+    #     for feature in features.labels:
+    #         data = self.loc(features[feature] == -999)
+    #         missing_rate.append(data[feature].size / features[feature].size)
+    #     missing_rate = np.array(missing_rate).reshape([1, -1]).squeeze()
+    #     missing_rate_labels = self.labels[1:]
+    #     return DataFrame(missing_rate, [0], missing_rate_labels)
+
 # -----------   data processing            ---------- #
 
 def log_process(x):
-    """"""
     x_log = np.log(1/(1 + x[:,sum(x<0)==0])) # to avoid log(0)
     # x_log = np.log(x[:,sum(x<0)==0])
     x = np.hstack((x, x_log))
@@ -131,7 +160,7 @@ def standardize(x):
     for colomn in range(x.shape[1]):
         x_standardize[:, colomn] = x_standardize[:, colomn] / std_x[colomn]
     
-    x_standardize = np.hstack((np.ones((x_standardize.shape[0], 1)), x_standardize))
+    # x_standardize = np.hstack((np.ones((x_standardize.shape[0], 1)), x_standardize))
 
     return x_standardize, mean_x, std_x
 
@@ -152,10 +181,26 @@ def build_poly(x, degrees):
         poly[:, x.shape[1] * degrees + i] = tmp_dict[i][0]
     for i in range(x.shape[1]):
         poly[:,i + x.shape[1] * degrees + count] = np.sqrt(np.abs(x[:,i]))
+    poly = np.hstack((np.ones((poly.shape[0], 1)), poly))
     return poly            
 
 def compute_accuracy(y_pred,y_true):
     return (1 - sum(abs(y_pred-y_true)/2)/len(y_pred))
+
+def hist_for_feature(data,dataCol):
+    data1 = data.loc[(data[dataCol]!=-999)].copy()
+    data1_s = data1.loc[(data.Prediction=='s')].copy()
+    data1_b = data1.loc[(data.Prediction=='b')].copy()
+
+    fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(20, 8))
+    hist_range = (min(data1_s[dataCol]),max(data1_s[dataCol]))
+    ax1.hist(data1_s[dataCol],log=False,range = hist_range,color = '#e0f3db')
+    ax1.set_title(dataCol+'_s')
+    ax2.hist(data1_b[dataCol],log=False,range = hist_range, color = '#999999')
+    ax2.set_title(dataCol+'_b')
+    plt.savefig('image/hist_notlog/'+dataCol+'.jpg')
+    del ax1,ax2
+    plt.close('all')
     
 # ----------     cross validation   ---------- #
 def predict_labels(weights, data):

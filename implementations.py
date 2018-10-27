@@ -94,7 +94,9 @@ def least_squares(y, tx):
     """calculate the least squares solution."""
     a = tx.T.dot(tx)
     b = tx.T.dot(y)
-    return np.linalg.solve(a, b)
+    w = np.linalg.solve(a, b)
+    loss = compute_loss(y, tx, w)
+    return loss,w
 
 def least_squares_regression(y, x):
     """linear regression demo."""
@@ -172,7 +174,6 @@ def penalized_logistic_regression(y, tx, w, lambda_):
 def regularized_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, threshold):
 
     # Set default weight
-    y = (y + 1) / 2
     weight = initial_w
     losses = []
 
