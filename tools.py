@@ -112,6 +112,7 @@ class DataFrame:
 # -----------   data processing            ---------- #
 
 def log_process(x):
+    """"""
     x_log = np.log10(1 + x[:,sum(x<0)==0]) # to avoid log(0)
     # x_log = np.log(x[:,sum(x<0)==0])
     x = np.hstack((x, x_log))
@@ -133,23 +134,23 @@ def standardize(x):
 
     return x_standardize, mean_x, std_x
 
-def build_polynomial_features(x, degree):
-    temp_dict = {}
+def build_poly(x, degrees):
+    tmp_dict = {}
     count = 0
     for i in range(x.shape[1]):
         for j in range(i+1,x.shape[1]):
-            temp = x[:,i] * x[:,j]
-            temp_dict[count] = [temp]
+            tmp = x[:,i] * x[:,j]
+            tmp_dict[count] = [tmp]
             count += 1
-    poly_length = x.shape[1] * (degree + 1) + count# + 1
-    poly = np.zeros(shape = (x.shape[0], poly_length))
-    for deg in range(1,degree+1):
+    poly_len = x.shape[1] * (degrees + 1) + count
+    poly = np.zeros((x.shape[0], poly_len))
+    for degree in range(1,degrees+1):
         for i in range(x.shape[1]):
-            poly[:,i + (deg-1) * x.shape[1]] = np.power(x[:,i],deg)
+            poly[:,i + (degree-1) * x.shape[1]] = np.power(x[:,i],degree)
     for i in range(count):
-        poly[:, x.shape[1] * degree + i] = temp_dict[i][0]
+        poly[:, x.shape[1] * degrees + i] = tmp_dict[i][0]
     for i in range(x.shape[1]):
-        poly[:,i + x.shape[1] * degree + count] = np.abs(x[:,i])**0.5
+        poly[:,i + x.shape[1] * degrees + count] = np.sqrt(np.abs(x[:,i]))
     return poly            
 
 def compute_accuracy(y_pred,y_true):
@@ -204,3 +205,23 @@ def cv_loop(y, x, k_fold, seed, regression_method, **kwargs):
         # print("{} fold cv: Training accuracy: {} - Test accuracy : {}".format(k, acc_tr, acc_te))
     
     return weight/k_fold,np.mean(list_accuracy_train),np.mean(list_accuracy_test)
+
+# ----------     Grid Search   ---------- #
+
+def get_best_parameters(para1,para2, acc):
+    """Get the best w from the result of grid search."""
+    max_row, max_col = np.unravel_index(np.argmax(acc), acc.shape)
+    return acc[max_row, max_col], para1[max_row], para2[max_col]
+
+def grid_search(y, tx, para1, para2):
+    """Algorithm for grid search."""
+    acc_tr = np.zeros((len(para1), len(para2)))
+    acc_te = np.zeros((len(para1), len(para2)))
+    tx = log_process(tx)
+    k_indices = build_k_indices(y, 10, seed = 1)
+    for i in range(0,len(para1)):
+        for j in range(0,len(para2)):
+            tx_poly = build_poly(tx, para1[i])
+            tx_poly,_,_ = standardize(tx_poly)
+            _,acc_tr[i][j],acc_te[i][j] = cross_validation(y, tx_poly, k_indices, 0, para2[j])
+    return acc_tr,acc_te
