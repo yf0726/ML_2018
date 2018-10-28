@@ -127,6 +127,6 @@ idx_te = np.concatenate((np.array(dataframe_te_grp[0].index),
 print('Completed')
 # -------------------- generate prediction files -------------------- #
 print('Start generating prediction files...', end='')
-output_path = 'data/output_ridge_regression_final.csv'
+output_path = 'data/Predicion.csv'
 create_csv_submission(idx_te, y_pred_te, output_path)
 print('Completed')
