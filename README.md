@@ -43,4 +43,3 @@ Contains 6 implemented model functions, including `least squares GD`, `least squ
 
 In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss` ,sigmoid function `sigmoid` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
 
-## Hyper-parameter tuning using Grid Search
