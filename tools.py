@@ -18,6 +18,7 @@ class DataFrame:
         self.labels = labels         # still use list to store string labels
         self.father_pointer = self \
             if father_pointer == 1 else father_pointer          # refer to the origin DataFrame
+        self.basis = self.father_pointer.index[0]
 
     def __getitem__(self,mark):
         """
@@ -68,7 +69,7 @@ class DataFrame:
         column = np.array(column)[0]    # not need [0], because it is an assignment
         self.values[:, column] = value  # change the value of itself
         temp = np.array(self.index)
-        temp = temp - 100000
+        temp = temp - self.basis
         self.father_pointer.values[temp, column] = value        # change the values in father
 
     # ----------  public methods  ---------- #
@@ -130,11 +131,11 @@ class DataFrame:
         """
         if type(position) == type(0) or type(position) == type(0.0) or type(position) == type([]):
             position = np.array(position)
-            position = position - 100000
+            position = position - self.basis
             values = self.father_pointer.values[position]   # for number position
             temp = np.array(self.father_pointer.index)
         elif type(position) == np.ndarray and type(position[0]) == np.int64:
-            position = position - 100000
+            position = position - self.basis
             values = self.father_pointer.values[position]   # for number position
             temp = np.array(self.father_pointer.index)
         elif type(position) == np.ndarray and type(position[0]) == np.bool_:
