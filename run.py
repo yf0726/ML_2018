@@ -98,8 +98,8 @@ print('Completed')
 # -------------------- model training -------------------- #
 # use ridge regression model
 print('Start training...', end='')
-lambda_ = 0.001
-degrees = [11, 10, 11]
+lambda_ = 0.0005
+degrees = [9, 9, 12]
 k_fold = 10
 seed = 10
 y_te = []
