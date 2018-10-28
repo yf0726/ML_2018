@@ -48,7 +48,7 @@ In addition, we also include other function that are needed by the model functio
 
 * ### `AnalysisDocument.ipynb`
 
-A file explains the process, evaluates the results and present evidence using plots and tables, which includes all data preparation, feature generation as well as cross-validation steps we have used.
+A file explains the process, evaluates the results and presents evidence using plots and tables, which includes all data preparation, feature generation as well as cross-validation steps we have used.
 
 * ### `CorrelatedFeature.jpg`, `GridSearchRidge.jpg`, `ModelComparison.jpg`
 
