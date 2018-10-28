@@ -37,6 +37,7 @@ And in tools.py we also include functions used for data processing.
 Besides, in tools.py we include the cross validation functions using `predict_labels`, `build_k_indices`, `cross_validation` and `cv_loop`.
 
 ## Regression models
+
 * ### `implementations.py`
 
 Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
@@ -44,6 +45,7 @@ Contains 6 implemented model functions, including `least squares GD`, `least squ
 In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss` ,sigmoid function `sigmoid` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
 
 ## Analysis document
+
 * ### `AnalysisDocument.ipynb`
 
 A file explains the process, evaluates the results and present evidence using plots and tables, which includes all data preparation, feature generation as well as cross-validation steps we have used.
