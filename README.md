@@ -53,3 +53,9 @@ A file explains the process, evaluates the results and presents evidence using p
 * ### `CorrelatedFeature.jpg`, `GridSearchRidge.jpg`, `ModelComparison.jpg`
 
 Figures in analysis process.
+
+## Prediction
+
+* ### `run.py`
+
+A python scripy use trained model and test data to produce prediction result `Predicion.csv` in `/data`.
