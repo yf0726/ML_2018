@@ -23,8 +23,8 @@ Below we will introduce files and functions in our repotory.
 Contain the given helper functions, including `load_csv_data` (used to load csv file) and `create_csv_submission` (used to create output files in csv format for Kaggle submission).
 
 * ### `tools.py`
-
-  * `DataFrame`: A class wraps Numpy methods and is used to replace the pandas.DataFrame. It includes methods of copy, reset_index, drop, loc, value counts and so on.
+  
+* `DataFrame`: A class wraps Numpy methods and is used to replace the pandas.DataFrame. It includes methods of copy,  reset_index, drop, loc, value counts and so on.
 
 And in tools.py we also include functions used for data processing.
 
