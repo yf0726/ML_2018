@@ -10,9 +10,9 @@ In this project, we are given train set data (including 250000 events, with an I
 
 To reproduce our result one will need to:
 
-1. Install `python` and `Numpy` on their computers. In order to reproduce perfectly, please make sure that the versions are `python3.6.5` and `Numpy1.14.3`.
+1. Install `python` and `Numpy` on you computer. In order to reproduce perfectly, please make sure that the versions are `python3.6.5` and `Numpy1.14.3` respectively;
 2. Download `train.csv` and `test.csv` from [kaggle](https://www.kaggle.com/c/epfml18-higgs), and save them in `/data` document;
-3. Run the python scripy `run.py`.
+3. Run the python scripy `run.py` and the prediction result `Predicion.csv` will be produced in `/data` automatically .
 
 Below we will introduce files and functions in our repotory.
 
@@ -20,26 +20,36 @@ Below we will introduce files and functions in our repotory.
 
 * ### `helpers.py`
 
-Contains the given helper functions, including `load_csv_data` (used to load csv file) and `create_csv_submission` (used to create output files in csv format for Kaggle submission).
+Contain the given helper functions, including `load_csv_data` (used to load csv file) and `create_csv_submission` (used to create output files in csv format for Kaggle submission).
 
 * ### `tools.py`
-
-  * `DataFrame` The class is used to replace the pandas.DataFrame with Numpy methods, including copy, reset_index, drop, loc and value counts.
+  
+ * `DataFrame`: A class wraps Numpy methods and is used to replace the pandas.DataFrame. It includes methods of copy,  reset_index, drop, loc, value counts and so on.
 
 And in tools.py we also include functions used for data processing.
 
-  * `standardize`: Standardize data by minus data mean and then divide by data's standard deviation.
+  * `standardize`: Standardize data by subtracting data's mean and then divide by data's standard deviation.
 
-  * `log_process`: Take logarithm of positive data to narrow data ranging.
+  * `log_process`: Take logarithm of positive data to narrow data range.
 
   * `build_polynomial_features`: Build polynomial features by squaring, root-squaring and multiplying bewteen features. 
 
 Besides, in tools.py we include the cross validation functions using `predict_labels`, `build_k_indices`, `cross_validation` and `cv_loop`.
 
 ## Regression models
+
 * ### `implementations.py`
 
 Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
 
 In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss` ,sigmoid function `sigmoid` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
 
+## Analysis document
+
+* ### `AnalysisDocument.ipynb`
+
+A file explains the process, evaluates the results and presents evidence using plots and tables, which includes all data preparation, feature generation as well as cross-validation steps we have used.
+
+* ### `CorrelatedFeature.jpg`, `GridSearchRidge.jpg`, `ModelComparison.jpg`
+
+Figures in analysis process.
