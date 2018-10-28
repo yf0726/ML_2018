@@ -10,7 +10,7 @@ In this project, we are given train set data (including 250000 events, with an I
 
 To reproduce our result one will need to:
 
-1. Install `Numpy1.14.3` and `python3.6`on their computers;
+1. Install `python` and `Numpy` on their computers. In order to reproduce perfectly, please make sure that the versions are `python3.6` and `Numpy1.14.3`.
 2. Download `train.csv` and `test.csv` from [kaggle](https://www.kaggle.com/c/epfml18-higgs), and save them in `/data` document;
 3. Run the python scripy `run.py`.
 
