@@ -1,8 +1,18 @@
+# -*- coding: utf-8 -*-
 import csv
 import numpy as np
 
 def load_csv_data(data_path, sub_sample=False):
-    """Loads data and returns y (class labels), tX (features) and ids (event ids)"""
+    """
+    Loads data and returns y (class labels), tX (features) and ids (event ids)
+
+    :param data_path: string -- data path
+    :param sub_sample: bool -- whether to sub-sample
+    :return: yb: numpy.array -- prediction labels
+             input_data: numpy.array -- data
+             ids: numpy.array -- id of data
+             labels: list of string -- name of the features
+    """
     y = np.genfromtxt(data_path, delimiter=",", skip_header=1, dtype=str, usecols=1)
     x = np.genfromtxt(data_path, delimiter=",", skip_header=1)
     labels = open(data_path,'r').readline()
@@ -25,15 +35,6 @@ def load_csv_data(data_path, sub_sample=False):
         ids = ids[::50]
 
     return yb, input_data, ids, labels
-
-# def predict_labels(weights, data):
-#     """Generates class predictions given weights, and a test data matrix"""
-#     y_pred = np.dot(data, weights)
-#     y_pred[np.where(y_pred <= 0)] = -1
-#     y_pred[np.where(y_pred > 0)] = 1
-    
-#     return y_pred
-
 
 def create_csv_submission(ids, y_pred, name):
     """
