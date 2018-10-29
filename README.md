@@ -40,7 +40,7 @@ Besides, in tools.py we include the cross validation functions using `predict_la
 
 * ### `implementations.py`
 
-Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
+Contains 6 implemented model functions, including `least_squares_GD`, `least_squares_SGD`, `least_squares`, `ridge_regression`, `logistic_regression` and `reg_logistic_regression`.
 
 In addition, we also include other function that are needed by the model functions (namely, cost functions `calculate_logi_loss`, `calculate_mse`, `calculate_mae` and `compute_loss`, logistic function `logistic` and (stochastic) gradient descent `batch_iter` and `compute_gradient`).
 
