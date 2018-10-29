@@ -50,12 +50,8 @@ In addition, we also include other function that are needed by the model functio
 
 A file explains the process, evaluates the results and presents evidence using plots and tables, which includes all data preparation, feature generation as well as cross-validation steps we have used.
 
-* ### `CorrelatedFeature.jpg`, `GridSearchRidge.jpg`, `ModelComparison.jpg`
-
-Figures in analysis process.
-
 ## Prediction
 
 * ### `run.py`
 
-A python scripy use trained model and test data to produce prediction result `Predicion.csv` in `/data`.
+A python scripy use trained model and test data to produce prediction result `Predicion.csv` in `/data`, which is the same as what we uploaded to Kaggle.
