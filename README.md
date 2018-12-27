@@ -1,22 +1,24 @@
-# Machine Learning Project 1 on Higgs Boson Competition
+# Machine Learning Project 2 :Machine Learning for Science
 
-`Team`: 4 - 1 = 3 ducks
+`Teammates`: Yan Fu, Shengzhao Xia, Runzhe Liu
 
-`Teammates`: Yan Fu, Shengzhao Xia, Wan-Tzu Huang
+For this project we joined the lab in Chair of Economics and Management of Innovation. 
 
-This project is adapted from the Kaggle 2014 competition [Higgs Boson Machine Learning Challenge] (https://www.kaggle.com/c/Higgs-boson). The competition orgins from the famous Higgs Boson experiment and the competitors need to improve observation of Higgs Boson from background noise using machine learning methods. 
+In this project, we did:
 
-In this project, we are given train set data (including 250000 events, with an ID column, 30 feature columns, a weight column and a label column) and test set data (including 550000 events with an ID column and 30 feature columns). Only Numpy and visualization libraries are allowed. 
+1. Data collection: web scrap from Web of Science and get over 350,000 paper records;
+2. Name disambiguation: Disambiguation of different authors using same name;
+3. Classification: Using models (eg. logistic regression, neural network), and converting keywords as vectors using word2vec to predict if one researcher is dismissed or not.
 
 To reproduce our result one will need to:
 
-1. Install `Numpy` on their computers;
-2. Download `train.csv` and `test.csv` from [kaggle](https://www.kaggle.com/c/epfml18-higgs), and save them in `/data` document;
-3. Run the python scripy `run.py`.
+1. Install libraries like `gensim`,`sklearn` on their computers;
+2. Download [GoogleNews-vectors-negative300.bin.gz](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) from [kaggle](https://www.kaggle.com/c/epfml18-higgs), we did not include it in our submission because of its large size.
 
 Below we will introduce files and functions in our repotory.
 
 ## Auxiliary modules
+放爬虫和数据处理的文件
 
 * ### `helpers.py`
 
@@ -37,6 +39,7 @@ And in tools.py we also include functions used for data processing.
 Besides, in tools.py we include the cross validation functions using `predict_labels`, `build_k_indices`, `cross_validation` and `cv_loop`.
 
 ## Regression models
+放模型
 * ### `implementations.py`
 
 Contains 6 implemented model functions, including `least squares GD`, `least squares SGD`, `least squares`, `ridge regression`, `logistic regression` and `reg logistic regression`.
