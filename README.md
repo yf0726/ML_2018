@@ -14,9 +14,11 @@ To reproduce our result one will need to:
 
 1. Install libraries like `gensim`,`sklearn` on their computers;
 2. Download [GoogleNews-vectors-negative300.bin.gz](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) to do word2vec conversion, we did not include it in our submission because of its large size.
+3. Download [wiki-news-300d-1M-subword.vec](https://fasttext.cc/docs/en/english-vectors.html) to do word2vec conversion, we did not include it in our submission because of its large size.
 
-Below we will introduce files and functions in our repotory.
-And because we cannot upload the whole dataset(the list is sensitive to some extent; and the whole dataset is very large) we comment out the code where origin data is used and save and load the output of preprocessing part. We do not delete the comments because we want to use them to show what we do in pre-processing).
+
+Below we will introduce files and functions in our repository.
+And because we cannot upload the whole dataset(the list is sensitive to some extent; and the whole dataset is very large) we comment out the code where origin data is used and save and load the output of preprocessing part. We would include comments because we want to use them to show what we do in pre-processing).
 
 ## Auxiliary modules
 
@@ -25,9 +27,23 @@ This folder saves the codes used for webscraping and basic data cleaning, and it
 
 * ### `datapreprocessing`
 
+Undis_List_Generation_for_FastText.ipynb is used to create a list of undismissed researchers from database. But due to privacy Data_Complete_clean.txt is missing to run it.
+
 ## Working notebook
 * ### `Disambiguation.ipynb`: 
 The name disambiguation part. We use kNN+LOF outlier dectection in it.
 
 * ### `classification.ipynb`
 
+
+
+
+* ### The folder `Data`
+
+'author_explict_dict.pickle' and not_dis_author_dict_tmp.pickle contain keywords from each dismissed author and corresponding vectors from FASTTEXT.
+
+not_dis_author_dict.pickle and not_dis_author_dict_tmp.pickle contains keywords from each undismissed author in "Set 1" and corresponding vectors from FASTTEXT.
+
+total_no_dis_pub_2.csv and no_dis_auth_vec_2.csv contain publications from undismissed author and vectors from FASTTEXT in "Set 2"
+
+X_set1_fasttext.pickle,y_set1_fasttext.pickle,X_set2_fasttext.pickle,y_set2_fasttext.pickle contain X and y to train our model in the FASTTEXT part.
