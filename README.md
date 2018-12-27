@@ -33,16 +33,15 @@ Undis_List_Generation_for_FastText.ipynb is written to create a list of undismis
 This file is *NOT* reproducible because the data *author_df_nodup_aff.csv* cannot be shared for the sake of privacy.  
 
 ## Working notebook
-* ### `Disambiguation.ipynb`: 
+### `Disambiguation.ipynb`: 
 This notebook is written for name disambiguation. We use kNN+LOF outlier dectection in it and distinguish different researchers sharing same name by their subjects. 
 
-* ### `classification.ipynb`:
+### `classification.ipynb`:
 This notebook is written for author classification. The main objective of classification is to build a model based on researchers’ publications to predict whether he/she would get the sack after the repression of the coup. 
 
-* ### The folder `Data`:
+### The folder `Data`:
 
-
-
+#### - For FastTest:
 `author_explict_dict.pickle` and `not_dis_author_dict_tmp.pickle` contain keywords from each dismissed author and corresponding vectors from FASTTEXT.
 
 `not_dis_author_dict.pickle` and `not_dis_author_dict_tmp.pickle` contains keywords from each undismissed author in "Set 1" and corresponding vectors from FASTTEXT.
