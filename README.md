@@ -2,17 +2,19 @@
 
 `Teammates`: Yan Fu, Shengzhao Xia, Runzhe Liu
 
-For this project we joined the lab in Chair of Economics and Management of Innovation. 
+For this project, we joined the lab in Chair of Economics and Management of Innovation. 
 
 In this project, we did:
 
-1. Data collection: web scrap from [Web of Science](http://apps.webofknowledge.com/WOS_GeneralSearch_input.do?product=WOS&search_mode=GeneralSearch&SID=F41mtBBV1mNZKmygFN7&preferencesSaved=) and get over 350,000 paper records;
-2. Name disambiguation: Disambiguation of different authors using same name;
-3. Classification: Using models (eg. logistic regression, neural network), and converting keywords as vectors using word2vec to predict if one researcher is dismissed or not.
+1. Data collection: Web scraping from [Web of Science](http://apps.webofknowledge.com/WOS_GeneralSearch_input.do?product=WOS&search_mode=GeneralSearch&SID=F41mtBBV1mNZKmygFN7&preferencesSaved=) and get over 350,000 paper records;
+2. Name disambiguation: Disambiguation of different authors using same name; 
+3. Classification: Convert keywords to numerical representations and use supervised machine learning methods (eg. logistic regression, neural network) to predict if one researcher would be dismissed or not.
 
 To reproduce our result one will need to:
 
-1. Install libraries like `gensim`,`sklearn` on their computers;
+1. Install relevant libraries on their computers:
+- NLP and machine learing library:`[gensim](https://radimrehurek.com/gensim/)`(conda install -c conda-forge gensim),`[sklearn](https://scikit-learn.org/stable/)`(pip install -U scikit-learn)
+keras.like 
 2. Download [GoogleNews-vectors-negative300.bin.gz](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) to do word2vec conversion, we did not include it in our submission because of its large size.
 3. Download [wiki-news-300d-1M-subword.vec](https://fasttext.cc/docs/en/english-vectors.html) to do word2vec conversion, we did not include it in our submission because of its large size.
 
