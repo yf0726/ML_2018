@@ -15,21 +15,22 @@ To reproduce our result one will need to:
 1. Install relevant libraries on their computers:
 - NLP and machine learing library: [`gensim`](https://radimrehurek.com/gensim/)(conda install -c conda-forge gensim),[`sklearn`](https://scikit-learn.org/stable/)(pip install -U scikit-learn);
 - Deep learning labrary: [`Tensorflow`](https://www.tensorflow.org)(pip install tensorflow), [`keras`](https://keras.io)(pip install keras).
-2. Download [GoogleNews-vectors-negative300.bin.gz](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) and put it into **data** fold to do word2vec conversion, we did not include it in our submission because of its large size.
-3. Download [wiki-news-300d-1M-subword.vec](https://fasttext.cc/docs/en/english-vectors.html) and put it into **data** fold to do FastText conversion, we did not include it in our submission because of its large size.
-
+2. Download [GoogleNews-vectors-negative300.bin.gz](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) and put it into *data fold* to do word2vec conversion, we did not include it in our submission because of its large size.
+3. Download [wiki-news-300d-1M-subword.vec](https://fasttext.cc/docs/en/english-vectors.html) and put it into *data fold* to do FastText conversion, we did not include it in our submission because of its large size.
 
 Below we will introduce files and functions in our repository.
-And because we cannot upload the whole dataset(the list is sensitive to some extent; and the whole dataset is very large) we comment out the code where origin data is used and save and load the output of preprocessing part. We would include comments because we want to use them to show what we do in pre-processing).
+And because we **cannot** upload the whole dataset (the dismissed author list is sensitive to some extent; and the whole dataset is very large), we comment out the code where origin data is used and save and load the intermediate output of preprocessing part.
 
 ## Auxiliary modules
 
-* ### The folder `DataCollection`
-This folder saves the codes used for webscraping and basic data cleaning, and it is *NOT* reproducible because we delete the username and password needed for apply request from WOS. 
+* ### `Scrapping.ipynb`, `scraper_WOS.py`, `parsing.py`, `DataCleaning.ipynb`
+These files include codes used for web scraping and basic data cleaning, and they are *NOT* reproducible because we delete the username and password needed for apply request from WOS. 
 
-* ### `datapreprocessing`
+* ### `Undis_List_Generation_for_FastText.ipynb`
 
-Undis_List_Generation_for_FastText.ipynb is used to create a list of undismissed researchers from database. But due to privacy Data_Complete_clean.txt is missing to run it.
+Undis_List_Generation_for_FastText.ipynb is written to create a list of undismissed researchers extracted from database *author_df_nodup_aff.csv*. The list is used for the generation of feature by FastText. 
+
+This file is *NOT* reproducible because the data *author_df_nodup_aff.csv* cannot be shared for the sake of privacy.  
 
 ## Working notebook
 * ### `Disambiguation.ipynb`: 
