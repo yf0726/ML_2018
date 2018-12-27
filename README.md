@@ -47,8 +47,6 @@ This notebook is written for author classification. The main objective of classi
 
 `total_no_dis_pub_2.csv` and `no_dis_auth_vec_2.csv` contain publications from undismissed author and vectors from FASTTEXT in "Set 2".
 
-**However**, these data is **NOT** uploaded for the sake of size limitation.
-
 * #### Feature extracted by Word2vec:
 `X_keyword_vector.pickle` and `y_keyword_vector.pickle` contain features extracted by Word2vec method and corresponding labels.
 
