@@ -41,11 +41,11 @@ This notebook is written for author classification. The main objective of classi
 
 ### The folder `Data`:
 
-#### - For FastTest:
+* #### For FastTest:
 `author_explict_dict.pickle` and `not_dis_author_dict_tmp.pickle` contain keywords from each dismissed author and corresponding vectors from FASTTEXT.
 
 `not_dis_author_dict.pickle` and `not_dis_author_dict_tmp.pickle` contains keywords from each undismissed author in "Set 1" and corresponding vectors from FASTTEXT.
 
 `total_no_dis_pub_2.csv` and `no_dis_auth_vec_2.csv` contain publications from undismissed author and vectors from FASTTEXT in "Set 2"
 
-X_set1_fasttext.pickle,y_set1_fasttext.pickle,X_set2_fasttext.pickle,y_set2_fasttext.pickle contain X and y to train our model in the FASTTEXT part.
+`X_set1_fasttext.pickle`, `y_set1_fasttext.pickle`, `X_set2_fasttext.pickle`, `y_set2_fasttext.pickle` contain X and y to train our model in the FASTTEXT part.
