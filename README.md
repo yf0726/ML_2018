@@ -23,10 +23,10 @@ And because we **cannot** upload the whole dataset (the dismissed author list is
 
 ## Auxiliary modules
 
-* ### `Scrapping.ipynb`, `scraper_WOS.py`, `parsing.py`, `DataCleaning.ipynb`
+### `Scrapping.ipynb`, `scraper_WOS.py`, `parsing.py`, `DataCleaning.ipynb`:
 These files include codes used for web scraping and basic data cleaning, and they are *NOT* reproducible because we delete the username and password needed for apply request from WOS. 
 
-* ### `Undis_List_Generation_for_FastText.ipynb`
+### `Undis_List_Generation_for_FastText.ipynb`:
 
 Undis_List_Generation_for_FastText.ipynb is written to create a list of undismissed researchers extracted from database *author_df_nodup_aff.csv*. The list is used for the generation of feature by FastText. 
 
@@ -34,19 +34,19 @@ This file is *NOT* reproducible because the data *author_df_nodup_aff.csv* canno
 
 ## Working notebook
 * ### `Disambiguation.ipynb`: 
-The name disambiguation part. We use kNN+LOF outlier dectection in it.
+This notebook is written for name disambiguation. We use kNN+LOF outlier dectection in it and distinguish different researchers sharing same name by their subjects. 
 
-* ### `classification.ipynb`
+* ### `classification.ipynb`:
+This notebook is written for author classification. The main objective of classification is to build a model based on researchers’ publications to predict whether he/she would get the sack after the repression of the coup. 
+
+* ### The folder `Data`:
 
 
 
+`author_explict_dict.pickle` and `not_dis_author_dict_tmp.pickle` contain keywords from each dismissed author and corresponding vectors from FASTTEXT.
 
-* ### The folder `Data`
+`not_dis_author_dict.pickle` and `not_dis_author_dict_tmp.pickle` contains keywords from each undismissed author in "Set 1" and corresponding vectors from FASTTEXT.
 
-'author_explict_dict.pickle' and not_dis_author_dict_tmp.pickle contain keywords from each dismissed author and corresponding vectors from FASTTEXT.
-
-not_dis_author_dict.pickle and not_dis_author_dict_tmp.pickle contains keywords from each undismissed author in "Set 1" and corresponding vectors from FASTTEXT.
-
-total_no_dis_pub_2.csv and no_dis_auth_vec_2.csv contain publications from undismissed author and vectors from FASTTEXT in "Set 2"
+`total_no_dis_pub_2.csv` and `no_dis_auth_vec_2.csv` contain publications from undismissed author and vectors from FASTTEXT in "Set 2"
 
 X_set1_fasttext.pickle,y_set1_fasttext.pickle,X_set2_fasttext.pickle,y_set2_fasttext.pickle contain X and y to train our model in the FASTTEXT part.
