@@ -26,7 +26,8 @@ This folder saves the codes used for webscraping and basic data cleaning, and it
 * ### `datapreprocessing`
 
 ## Working notebook
-* ### `Disambiguation.ipynb`: The name disambiguation part. We use kNN+LOF outlier dectecion in it.
+* ### `Disambiguation.ipynb`: 
+The name disambiguation part. We use kNN+LOF outlier dectection in it.
 
 * ### `classification.ipynb`
 
