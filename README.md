@@ -13,8 +13,8 @@ In this project, we did:
 To reproduce our result one will need to:
 
 1. Install relevant libraries on their computers:
-- NLP and machine learing library:[`gensim`](https://radimrehurek.com/gensim/)(conda install -c conda-forge gensim),[`sklearn`](https://scikit-learn.org/stable/)(pip install -U scikit-learn)
-keras.like 
+- NLP and machine learing library: [`gensim`](https://radimrehurek.com/gensim/)(conda install -c conda-forge gensim),[`sklearn`](https://scikit-learn.org/stable/)(pip install -U scikit-learn);
+- Deep learning labrary: [`Tensorflow`](https://www.tensorflow.org)(pip install tensorflow), [`keras`](https://keras.io)(pip install keras).
 2. Download [GoogleNews-vectors-negative300.bin.gz](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) to do word2vec conversion, we did not include it in our submission because of its large size.
 3. Download [wiki-news-300d-1M-subword.vec](https://fasttext.cc/docs/en/english-vectors.html) to do word2vec conversion, we did not include it in our submission because of its large size.
 
