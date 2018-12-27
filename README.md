@@ -42,8 +42,14 @@ This notebook is written for author classification. The main objective of classi
 ### The folder `Data`:
 * #### Data obtained after data pre-processing:
 `author_explict_dict.pickle` contains paper data of each author in dismissed list.
+
 `not_dis_author_dict.pickle` contains paper data of each author in undismissed list in "set 1".
+
 `total_no_dis_pub_2.csv` and `no_dis_auth_vec_2.csv` contain publications from undismissed author and vectors from FASTTEXT in "Set 2".
+
+`total_no_dis_pub_2.csv` and `no_dis_auth_vec_2.csv` contain publications from undismissed author and vectors from FASTTEXT in "Set 2"
+
+**However**, these data is **NOT** uploaded for the sake of size limitation.
 
 * #### Feature extracted by Word2vec:
 `X_keyword_vector.pickle` and `y_keyword_vector.pickle` contain features extracted by Word2vec method and corresponding labels.
@@ -52,6 +58,4 @@ This notebook is written for author classification. The main objective of classi
 `X_bag_of_words.pickle` and `y_bag_of_words.pickle` contain features extracted by Bag-of-words method and corresponding labels.
 
 * #### Feature extracted by FastTest:
-`total_no_dis_pub_2.csv` and `no_dis_auth_vec_2.csv` contain publications from undismissed author and vectors from FASTTEXT in "Set 2"
-
 `X_set1_fasttext.pickle`, `y_set1_fasttext.pickle`, `X_set2_fasttext.pickle`, `y_set2_fasttext.pickle` contain X and y to train our model in the FASTTEXT part.
