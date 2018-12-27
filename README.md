@@ -1,4 +1,4 @@
-# Machine Learning Project 2 :Machine Learning for Science
+# Machine Learning Project 2: Machine Learning for Science
 
 `Teammates`: Yan Fu, Shengzhao Xia, Runzhe Liu
 
@@ -6,7 +6,7 @@ For this project we joined the lab in Chair of Economics and Management of Innov
 
 In this project, we did:
 
-1. Data collection: web scrap from Web of Science and get over 350,000 paper records;
+1. Data collection: web scrap from [Web of Science](http://apps.webofknowledge.com/WOS_GeneralSearch_input.do?product=WOS&search_mode=GeneralSearch&SID=F41mtBBV1mNZKmygFN7&preferencesSaved=) and get over 350,000 paper records;
 2. Name disambiguation: Disambiguation of different authors using same name;
 3. Classification: Using models (eg. logistic regression, neural network), and converting keywords as vectors using word2vec to predict if one researcher is dismissed or not.
 
